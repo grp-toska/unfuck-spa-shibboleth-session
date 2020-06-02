@@ -1,6 +1,7 @@
 let shibbolethIntervalId
+import axios from 'axios'
 
-const initShibbolethPinger = (timeoutInterval = 60000) => {
+export const initShibbolethPinger = (timeoutInterval = 60000) => {
   // Set the name of the hidden property and the change event for visibility
   let hidden
   let visibilityChange
@@ -20,9 +21,16 @@ const initShibbolethPinger = (timeoutInterval = 60000) => {
   function startPinger() {
     if (shibbolethIntervalId) clearInterval(shibbolethIntervalId)
 
-    shibbolethIntervalId = setInterval(async () => {
-      const res = await fetch(window.location.href)
-      console.log(res)
+    shibbolethIntervalId = setInterval(() => {
+      axios
+        .get(window.location.href, {
+          validateStatus: null,
+        })
+        .catch((error) => {
+          if (error.message.toLowerCase() === 'network error') {
+            return window.location.reload(true)
+          }
+        })
     }, timeoutInterval)
   }
 
@@ -43,8 +51,4 @@ const initShibbolethPinger = (timeoutInterval = 60000) => {
 
   // Start pinger on first load
   startPinger()
-}
-
-module.exports = {
-  initShibbolethPinger,
 }
