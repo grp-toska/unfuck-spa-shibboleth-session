@@ -38,6 +38,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     div.style.position = 'absolute'
     div.style.top = 0
     div.style.opacity = 0.9
+    div.style.zIndex = 1000000
     body.appendChild(div)
 
     const message = document.createElement('H1')
@@ -59,6 +60,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     container.style.padding = '50px'
     container.style.textAlign = 'center'
     container.style.width = '100%'
+    container.style.zIndex = 1000001
 
     container.appendChild(message)
     container.appendChild(a)
@@ -74,6 +76,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
    * This function is useless, if loginwindow.close gets detected correctly.
    */
   function startLoginWatcher() {
+    if (loginWatcherId) clearInterval(loginWatcherId)
     loginWatcherId = setInterval(() => {
       checkReloginStatus()
       loginCheckAttemps += 1
