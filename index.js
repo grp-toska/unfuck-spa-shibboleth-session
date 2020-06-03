@@ -37,22 +37,30 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     div.style.width = '100%'
     div.style.position = 'absolute'
     div.style.top = 0
-    div.style.opacity = 0.5
+    div.style.opacity = 0.9
     body.appendChild(div)
 
-    var message = document.createElement('H1')
+    const message = document.createElement('H1')
     message.className = overlayClassName
-    var messageContent = document.createTextNode("A login page should have opened in a new window. If it did not appear, check your browser's popup-settings.")
+    const messageContent = document.createTextNode("A login page should have opened in a new window. If it did not appear, check your browser's popup-settings.")
     message.appendChild(messageContent)
-    message.style.position = 'absolute'
-    message.style.top = '25%'
-    message.style.padding = '100px'
-    message.style.margin = '0 auto'
-    message.style.width = '100%'
-    message.style.backgroundColor = '#fafafa'
-    message.style.textAlign = 'center'
 
-    body.appendChild(message)
+    const a = document.createElement('a')
+    const link = document.createTextNode('If the window didnt open, or you closed it by accident - click here.')
+    a.appendChild(link)
+
+    a.addEventListener('click', checkSessionStatus, false)
+
+    const container = document.createElement('div')
+    container.className = overlayClassName
+    container.style.position = 'absolute'
+    container.style.top = '25%'
+    container.style.backgroundColor = 'white'
+    container.style.padding = '50px'
+
+    container.appendChild(message)
+    container.appendChild(a)
+    body.appendChild(container)
   }
 
   function removeOverlay() {
