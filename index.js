@@ -1,3 +1,4 @@
+let loginWindow
 let shibbolethIntervalId
 let loginWatcherId
 let loginCheckAttemps = 0
@@ -26,8 +27,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
 
   function enableOverlay() {
     // Remove old elements if any
-    const elements = document.getElementsByClassName(overlayClassName)
-    while (elements.length > 0) elements[0].remove()
+    removeOverlay()
 
     const body = document.getElementsByTagName('body')[0]
     const div = document.createElement('div')
@@ -55,8 +55,9 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     body.appendChild(message)
   }
 
-  function disableOverlay() {
-    document.getElementById(overlayClassName).remove()
+  function removeOverlay() {
+    const elements = document.getElementsByClassName(overlayClassName)
+    while (elements.length > 0) elements[0].remove()
   }
 
   /***
@@ -79,7 +80,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
       .then((res) => {
         console.log('re-login succeeded')
         clearInterval(loginWatcherId)
-        disableOverlay()
+        removeOverlay()
       })
       .catch((e) => console.log('re-login not yet succeeded'))
   }
@@ -97,14 +98,16 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
           const wantsToLogin = window.confirm('Your login session has expired. Click OK to log back in, or Cancel to lose all unfinished work and log out of the service.')
           const customUrl = `${urlToPing}?${key}=${value}`
           if (wantsToLogin) {
-            const loginWindow = window.open(customUrl, '_blank', 'width=800,height=700')
-            const timer = setInterval(function () {
-              if (loginWindow.closed) {
-                clearInterval(timer)
-                console.log('Login window closed, checking immediately if user actually logged in...')
-                checkReloginStatus()
-              }
-            }, 1000)
+            if (!loginWindow) {
+              loginWindow = window.open(customUrl, '_blank', 'width=800,height=700')
+              const timer = setInterval(function () {
+                if (loginWindow.closed) {
+                  clearInterval(timer)
+                  console.log('Login window closed, checking immediately if user actually logged in...')
+                  checkReloginStatus()
+                }
+              }, 1000)
+            }
             startLoginWatcher()
           } else {
             window.location.reload(true)
