@@ -55,7 +55,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
       'click',
       function (e) {
         e.preventDefault()
-        checkSessionStatus()
+        checkSessionStatus(false)
       },
       false
     )
@@ -106,7 +106,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
       .catch((e) => console.log('re-login not yet succeeded'))
   }
 
-  function checkSessionStatus() {
+  function checkSessionStatus(askForConfirmation = true) {
     axios
       .get(urlToPing, {
         validateStatus: null,
@@ -116,12 +116,13 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
           clearInterval(shibbolethIntervalId)
           loginCheckAttemps = 0
           enableOverlay()
-          const wantsToLogin = window.confirm('Your login session has expired. Click OK to log back in, or Cancel to lose all unfinished work and log out of the service.')
+          let wantsToLogin = true
+          if (askForConfirmation) wantsToLogin = window.confirm('Your login session has expired. Click OK to log back in, or Cancel to lose all unfinished work and log out of the service.')
           const customUrl = `${urlToPing}?${key}=${value}`
           if (wantsToLogin) {
             loginWindow = window.open(customUrl, '_blank', 'width=800,height=700')
             const timer = setInterval(function () {
-              if (loginWindow.closed) {
+              if (loginWindow && loginWindow.closed) {
                 loginWindow = undefined
                 clearInterval(timer)
                 console.log('Login window closed, checking immediately if user actually logged in...')
