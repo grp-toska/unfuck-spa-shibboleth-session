@@ -91,23 +91,23 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
         validateStatus: null,
       })
       .catch((error) => {
-        if (error.message.toLowerCase() === 'network error') {
+        if (error.message.toLowerCase() === 'network error' && !loginWindow) {
           clearInterval(shibbolethIntervalId)
           loginCheckAttemps = 0
           enableOverlay()
           const wantsToLogin = window.confirm('Your login session has expired. Click OK to log back in, or Cancel to lose all unfinished work and log out of the service.')
           const customUrl = `${urlToPing}?${key}=${value}`
           if (wantsToLogin) {
-            if (!loginWindow) {
-              loginWindow = window.open(customUrl, '_blank', 'width=800,height=700')
-              const timer = setInterval(function () {
-                if (loginWindow.closed) {
-                  clearInterval(timer)
-                  console.log('Login window closed, checking immediately if user actually logged in...')
-                  checkReloginStatus()
-                }
-              }, 1000)
-            }
+            loginWindow = window.open(customUrl, '_blank', 'width=800,height=700')
+            const timer = setInterval(function () {
+              if (loginWindow.closed) {
+                loginWindow = undefined
+                clearInterval(timer)
+                console.log('Login window closed, checking immediately if user actually logged in...')
+                checkReloginStatus()
+              }
+            }, 1000)
+
             startLoginWatcher()
           } else {
             window.location.reload(true)
