@@ -57,6 +57,8 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     container.style.top = '25%'
     container.style.backgroundColor = 'white'
     container.style.padding = '50px'
+    container.style.textAlign = 'center'
+    container.style.width = '100%'
 
     container.appendChild(message)
     container.appendChild(a)
