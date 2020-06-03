@@ -47,10 +47,18 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     message.appendChild(messageContent)
 
     const a = document.createElement('a')
+    a.href = '' // Just to enable hover pointer.
     const link = document.createTextNode('If the window didnt open, or you closed it by accident - click here.')
     a.appendChild(link)
 
-    a.addEventListener('click', checkSessionStatus, false)
+    a.addEventListener(
+      'click',
+      function (e) {
+        e.preventDefault()
+        checkSessionStatus()
+      },
+      false
+    )
 
     const container = document.createElement('div')
     container.className = overlayClassName
