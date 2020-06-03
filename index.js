@@ -7,7 +7,7 @@ let overlayClassName = 'e1f4a4c8-6a88-44df-bcbc-cdf4bc698fc7'
 
 import axios from 'axios'
 
-export const initShibbolethPinger = (urlToPing = window.location.href, pingInterval = 60000) => {
+export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.location.href) => {
   // Set the name of the hidden property and the change event for visibility
   let hidden
   let visibilityChange
