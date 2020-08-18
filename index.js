@@ -35,7 +35,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
     div.style.backgroundColor = 'gray'
     div.style.height = '100%'
     div.style.width = '100%'
-    div.style.position = 'absolute'
+    div.style.position = 'fixed'
     div.style.top = 0
     div.style.opacity = 0.9
     div.style.zIndex = 1000000
@@ -62,7 +62,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
 
     const container = document.createElement('div')
     container.className = overlayClassName
-    container.style.position = 'absolute'
+    container.style.position = 'fixed'
     container.style.top = '25%'
     container.style.backgroundColor = 'white'
     container.style.padding = '50px'
