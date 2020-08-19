@@ -8,7 +8,9 @@ let overlayClassName = 'e1f4a4c8-6a88-44df-bcbc-cdf4bc698fc7'
 
 import axios from 'axios'
 
-export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.location.href) => {
+export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger = false) => {
+  if (!urlToPing) urlToPing = window.location.href
+
   // Set the name of the hidden property and the change event for visibility
   let hidden
   let visibilityChange
@@ -114,6 +116,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing = window.lo
       .catch((error) => {
         if (error.message.toLowerCase() === 'network error' && !loginWindow) {
           clearInterval(shibbolethIntervalId)
+          if (!onlyPinger) return // Caller application handles the error.
           loginCheckAttemps = 0
           enableOverlay()
           let wantsToLogin = true
