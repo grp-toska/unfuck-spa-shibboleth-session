@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/grp-toska/unfuck-spa-shibboleth-session#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^1.6.0"
   }
 }
