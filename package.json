@@ -1,6 +1,6 @@
 {
   "name": "unfuck-spa-shibboleth-session",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "Fixes common shibboleth session related issues for SPAs",
   "main": "index.js",
   "scripts": {
