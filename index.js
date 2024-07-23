@@ -99,7 +99,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
 
   function checkReloginStatus() {
     axios
-      .get(urlToPing, { validateStatus: null })
+      .get(urlToPing, { validateStatus: (status) => status !== 302 })
       .then((res) => {
         console.log('re-login succeeded')
         clearInterval(loginWatcherId)
@@ -111,10 +111,10 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
   function checkSessionStatus(askForConfirmation = true) {
     axios
       .get(urlToPing, {
-        validateStatus: null,
+        validateStatus: (status) => status !== 302,
       })
       .catch((error) => {
-        if (error.message.toLowerCase() === 'network error' && !loginWindow) {
+        if (!loginWindow) {
           clearInterval(shibbolethIntervalId)
           if (!onlyPinger) return // Caller application handles the error.
           loginCheckAttemps = 0
