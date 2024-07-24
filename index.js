@@ -116,7 +116,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
       .catch((error) => {
         if (!loginWindow) {
           clearInterval(shibbolethIntervalId)
-          if (!onlyPinger) return // Caller application handles the error.
+          if (onlyPinger) return // Caller application handles the error.
           loginCheckAttemps = 0
           enableOverlay()
           let wantsToLogin = true
