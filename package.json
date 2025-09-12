@@ -1,6 +1,6 @@
 {
   "name": "unfuck-spa-shibboleth-session",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Fixes common shibboleth session related issues for SPAs",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/grp-toska/unfuck-spa-shibboleth-session#readme",
   "dependencies": {
-    "axios": "^0.28.0"
+    "axios": "^1.12.0"
   }
 }
