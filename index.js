@@ -6,8 +6,6 @@ let key = 'c75cf8c7-6ad6-4bd2-90e5-0d3ef65c8243'
 let value = '8acddd76-a3d0-4bc2-a05d-187c6746e36d'
 let overlayClassName = 'e1f4a4c8-6a88-44df-bcbc-cdf4bc698fc7'
 
-import axios from 'axios'
-
 export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger = false) => {
   if (!urlToPing) urlToPing = window.location.href
 
@@ -97,23 +95,26 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
     }, 10000)
   }
 
-  function checkReloginStatus() {
-    axios
-      .get(urlToPing, { validateStatus: (status) => status !== 302 })
+  const checkReloginStatus = () => 
+    fetch(urlToPing, { method: "GET", redirect: "manual" })
       .then((res) => {
+        if (res.status === 302) throw new Error("Request failed with status code 302")
+        return res
+      })
+      .then(() => {
         console.log('re-login succeeded')
         clearInterval(loginWatcherId)
         removeOverlay()
       })
-      .catch((e) => console.log('re-login not yet succeeded'))
-  }
+      .catch(() => console.log('re-login not yet succeeded'))
 
-  function checkSessionStatus(askForConfirmation = true) {
-    axios
-      .get(urlToPing, {
-        validateStatus: (status) => status !== 302,
+  const checkSessionStatus = (askForConfirmation = true) =>
+    fetch(urlToPing, { method: "GET", redirect: "manual" })
+      .then((res) => {
+        if (res.status === 302) throw new Error("Request failed with status code 302")
+        return res
       })
-      .catch((error) => {
+      .catch(() => {
         if (!loginWindow) {
           clearInterval(shibbolethIntervalId)
           if (onlyPinger) return // Caller application handles the error.
@@ -139,7 +140,6 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
           }
         }
       })
-  }
 
   function startPinger() {
     if (shibbolethIntervalId) clearInterval(shibbolethIntervalId)
