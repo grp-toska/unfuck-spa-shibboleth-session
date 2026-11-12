@@ -95,12 +95,15 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
     }, 10000)
   }
 
-  const checkReloginStatus = () => 
+  const pingSession = () =>
     fetch(urlToPing, { method: "GET", redirect: "manual" })
       .then((res) => {
         if (res.type === "opaqueredirect" || res.status === 302) throw new Error("Shibboleth session expired")
         return res
       })
+
+  const checkReloginStatus = () =>
+    pingSession()
       .then(() => {
         console.log('re-login succeeded')
         clearInterval(loginWatcherId)
@@ -109,11 +112,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
       .catch(() => console.log('re-login not yet succeeded'))
 
   const checkSessionStatus = (askForConfirmation = true) =>
-    fetch(urlToPing, { method: "GET", redirect: "manual" })
-      .then((res) => {
-        if (res.type === "opaqueredirect" || res.status === 302) throw new Error("Shibboleth session expired")
-        return res
-      })
+    pingSession()
       .catch(() => {
         if (!loginWindow) {
           clearInterval(shibbolethIntervalId)
