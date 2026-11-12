@@ -98,7 +98,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
   const checkReloginStatus = () => 
     fetch(urlToPing, { method: "GET", redirect: "manual" })
       .then((res) => {
-        if (res.status === 302) throw new Error("Request failed with status code 302")
+        if (res.type === "opaqueredirect" || res.status === 302) throw new Error("Shibboleth session expired")
         return res
       })
       .then(() => {
@@ -111,7 +111,7 @@ export const initShibbolethPinger = (pingInterval = 60000, urlToPing, onlyPinger
   const checkSessionStatus = (askForConfirmation = true) =>
     fetch(urlToPing, { method: "GET", redirect: "manual" })
       .then((res) => {
-        if (res.status === 302) throw new Error("Request failed with status code 302")
+        if (res.type === "opaqueredirect" || res.status === 302) throw new Error("Shibboleth session expired")
         return res
       })
       .catch(() => {
