@@ -20,11 +20,11 @@ Fixes common issues related to Shibboleth login in single page applications.
 
 ### How to use this package:
 
-1. Install the package to the frontend of your web-application `npm i unfuck-spa-shibboleth-session@latest`
+1. Install the package from GitHub, pinned to the latest [release tag](https://github.com/grp-toska/unfuck-spa-shibboleth-session/tags) (the npm release is no longer updated): `npm i grp-toska/unfuck-spa-shibboleth-session#v5.0.1`
 
-2. Import the initShibbolethPinger -function `import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'`
+3. Import the initShibbolethPinger -function `import { initShibbolethPinger } from 'unfuck-spa-shibboleth-session'`
 
-3. Use the imported function in a useEffect -hook, inside of your root container (App.js).
+4. Use the imported function in a useEffect -hook, inside of your root container (App.js).
 
 _The initShibbolethPinger -function should be called only once!_
 
